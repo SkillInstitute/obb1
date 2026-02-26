@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Baadshah Broking · Pro signals</title>
+  <!-- minimal, classic, luxury: Inter & 1 tiny inline canvas, no GSAP heavy load -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    /* ultra light, pro luxury: dark mode with soft glass, gold/blue whispers, fast */
+    *{margin:0; padding:0; box-sizing:border-box;}
+    body {
+      background: #0b0c12;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #edeff2;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+    .canvas-bg {
+      position: fixed;
+      top:0; left:0; width:100%; height:100%;
+      background: radial-gradient(circle at 30% 40%, #192230 0%, #0a0c15 90%);
+      z-index: 0;
+      opacity: 0.8;
+    }
+    /* subtle moving particles (very light: 8 particles only) */
+    .lux-particle {
+      position: fixed;
+      border-radius: 50%;
+      background: rgba(200, 220, 255, 0.1);
+      box-shadow: 0 0 12px rgba(212, 255, 215, 0.2);
+      width: 120px; height: 120px;
+      filter: blur(40px);
+      z-index: 0;
+      animation: float 18s infinite alternate ease-in-out;
+    }
+    .p2 { width: 180px; height: 180px; background: rgba(0, 212, 255, 0.06); left: 70%; top: 20%; filter: blur(60px); animation-duration: 24s; }
+    .p3 { width: 100px; height: 100px; background: rgba(255, 215, 0, 0.04); left: 15%; top: 70%; filter: blur(50px); animation-duration: 20s; }
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -30px) scale(1.1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 420px;
+      margin: 1.5rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    /* classic pro cards: thinner borders, less blur, refined glass */
+    .glass-card {
+      background: rgba(18, 22, 30, 0.6);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 0.5px solid rgba(255, 255, 255, 0.07);
+      border-radius: 36px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(212, 255, 255, 0.1) inset;
+      padding: 1.4rem 1.5rem;
+      transition: border 0.2s;
+    }
+    .glass-card:hover {
+      border: 0.5px solid rgba(0, 212, 255, 0.2);
+    }
+
+    /* hero minimal luxury */
+    .hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .dp-pro {
+      width: 104px; height: 104px;
+      border-radius: 50%;
+      background: #0b0c12;
+      box-shadow: 0 0 0 2px rgba(212, 255, 215, 0.15), 0 15px 30px -8px #000;
+    }
+    .dp-pro img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #1b1f2b;
+    }
+    .name-gold {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbcbcb 70%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+    .sub-pro {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #aaafbb;
+      background: rgba(255,255,255,0.02);
+      padding: 0.4rem 1.2rem;
+      border-radius: 60px;
+      border: 0.5px solid rgba(255,215,0,0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sub-pro::before {
+      content: "";
+      width: 8px; height: 8px;
+      background: #FFD700;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #FFD700;
+    }
+    .counter-live {
+      font-size: 1.7rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.3);
+      padding: 0.1rem 1.3rem;
+      border-radius: 60px;
+      border: 0.5px solid rgba(0,255,136,0.3);
+    }
+    .counter-num {
+      color: #cdffd7;
+      font-weight: 700;
+      text-shadow: 0 0 12px #90ffb0;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem 0.8rem;
+      margin: 0.2rem 0 0.2rem;
+    }
+    .tag {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: #c6ccda;
+      background: rgba(255,255,255,0.02);
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      border: 0.5px solid rgba(255,255,255,0.1);
+      letter-spacing: 0.02em;
+    }
+
+    /* feature rows — classic minimal */
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .f-item {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: rgba(12, 15, 22, 0.5);
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 0.9rem 1.5rem;
+      border: 0.5px solid rgba(255,255,255,0.03);
+    }
+    .f-icon {
+      font-size: 1.9rem;
+      width: 48px; height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: #dad5b5;
+    }
+    .f-text {
+      font-weight: 500;
+      font-size: 1.18rem;
+      color: #f0f2f8;
+    }
+    .f-badge {
+      background: rgba(0, 212, 255, 0.1);
+      border: 0.5px solid #00D4FF40;
+      color: #b2f0ff;
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 0.2rem 0.7rem;
+      border-radius: 50px;
+      margin-left: 0.7rem;
+    }
+    .pulse-lux {
+      display: inline-block;
+      width: 10px; height: 10px;
+      background: #93f0b0;
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 12px #adffc0;
+    }
+
+    /* urgency — refined, not aggressive */
+    .urgency-lux {
+      background: rgba(25, 20, 25, 0.5);
+      backdrop-filter: blur(14px);
+      border: 0.5px solid rgba(255, 180, 130, 0.25);
+      border-radius: 48px;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .expiry {
+      font-size: 1.9rem;
+      font-weight: 500;
+      font-feature-settings: "tnum";
+      color: #fcd7b0;
+      letter-spacing: 2px;
+    }
+    .limited {
+      color: #cca;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-weight: 400;
+      background: rgba(0,0,0,0.3);
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      border: 0.5px solid rgba(255,215,0,0.2);
+    }
+
+    /* CTA — sophisticated, full width */
+    .cta-pro {
+      width: 100%;
+      min-height: 64px;
+      background: #1e222e;
+      border: none;
+      border-radius: 48px;
+      color: #f0f0f0;
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: 0.8px;
+      padding: 1rem 1.8rem;
+      backdrop-filter: blur(12px);
+      background: rgba(25, 30, 40, 0.7);
+      border: 0.5px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 8px 20px -6px #00000080, 0 0 0 1px rgba(255,255,255,0.02) inset;
+      transition: all 0.25s;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 500;
+      backdrop-filter: blur(20px);
+    }
+    .cta-pro:hover {
+      border-color: rgba(0, 212, 255, 0.6);
+      background: rgba(25, 35, 50, 0.8);
+      box-shadow: 0 15px 25px -8px #001d3d;
+      color: white;
+    }
+    .cta-pro:active { transform: scale(0.99); }
+
+    /* trust row */
+    .trust-lux {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: #9fa5b3;
+      background: rgba(0,0,0,0.2);
+      border-radius: 60px;
+      padding: 0.5rem 1rem;
+      border: 0.5px solid rgba(255,255,255,0.03);
+    }
+    .lock {
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+    .disclaimer-lux {
+      font-size: 0.65rem;
+      color: #6f7480;
+      text-align: center;
+      border-top: 0.5px solid #2f3542;
+      padding-top: 1rem;
+      margin-top: 0.4rem;
+      font-weight: 300;
+    }
+    /* animation fade (simple css, no gsap for speed) */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    .delay1 { animation-delay: 0.1s; }
+    .delay2 { animation-delay: 0.2s; }
+    .delay3 { animation-delay: 0.25s; }
+    .delay4 { animation-delay: 0.35s; }
+    .delay5 { animation-delay: 0.45s; }
+    .delay6 { animation-delay: 0.55s; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* remove all heavy extras, ultra light */
+    .no-gsap {
+      /* no external, just css micro-anim */
+    }
+    .dp-frame-lux {
+      transition: box-shadow 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <!-- super light background: 3 floating blurred shapes, no canvas loops (faster) -->
+  <div class="lux-particle" style="left:5%; top:10%;"></div>
+  <div class="lux-particle p2"></div>
+  <div class="lux-particle p3"></div>
+  <div class="canvas-bg"></div> <!-- static gradient, no heavy canvas -->
+
+  <div class="container">
+    <!-- HERO - classic pro luxury -->
+    <div class="glass-card hero fade-up">
+      <div class="dp-pro">
+        <img src="https://d1yei2z3i6k35z.cloudfront.net/13184094/699febd3b2f23_f51bcd14-0e63-4511-a9da-0e36bf71c114.jfif" alt="Baadshah" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2255%22%20fill%3D%22%231a1e2a%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2240%22%20y%3D%2275%22%20fill%3D%22%23d4af37%22%20font-size%3D%2232%22%3EOB%3C%2Ftext%3E%3C%2Fsvg%3E'">
+      </div>
+      <div class="name-gold">Official Baadshah Broking</div>
+      <div class="sub-pro"><span>SEBI Registered Research Analyst</span></div>
+      <div class="counter-live">
+        <span>👥</span>
+        <span class="counter-num" id="subCount">14.8k</span>
+        <span style="font-weight:300; font-size:1rem;">followers</span>
+      </div>
+      <div class="tag-row">
+        <span class="tag">Banknifty</span><span class="tag">Nifty</span><span class="tag">FinNifty</span><span class="tag">Sensex</span>
+        <span class="tag">Stock Options</span><span class="tag">Commodity</span><span class="tag">Equity</span><span class="tag">Swing</span>
+      </div>
+    </div>
+
+    <!-- FEATURES - 3 rows, classic subtle -->
+    <div class="features">
+      <div class="f-item fade-up delay1">
+        <span class="f-icon">✓</span>
+        <span class="f-text">95%+ Accuracy <span class="f-badge">verified</span></span>
+      </div>
+      <div class="f-item fade-up delay2">
+        <span class="f-icon"><span class="pulse-lux"></span>📡</span>
+        <span class="f-text">Live Market Updates</span>
+      </div>
+      <div class="f-item fade-up delay3">
+        <span class="f-icon">🏛️</span>
+        <span class="f-text">SEBI Registered <span class="f-badge" style="border-color:#FFD70070;">✔️</span></span>
+      </div>
+    </div>
+
+    <!-- URGENCY - classic timeless -->
+    <div class="urgency-lux fade-up delay3">
+      <span class="expiry" id="luxTimer">00:00:00</span>
+      <span class="limited">limited</span>
+    </div>
+
+    <!-- CTA full width, opens telegram link, light & pro -->
+    <button class="cta-pro fade-up delay4" id="ctaLux">Join free telegram channel</button>
+
+    <!-- trust & disclaimer -->
+    <div class="trust-lux fade-up delay5">
+      <span class="lock">🔒</span>
+      <span>SEBI registered</span>
+      <span>🛡️</span>
+    </div>
+    <div class="disclaimer-lux fade-up delay6">
+      *professional analyst · risk disclosure · past performance not indicative
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ultra light: no gsap, no heavy loops
+      const TELEGRAM = "https://t.me/+Vmk0cy-C1IE3YjVl";
+
+      // live subscriber count tiny update (light)
+      let subs = 14920;
+      const subSpan = document.getElementById('subCount');
+      setInterval(() => {
+        subs += Math.floor(Math.random() * 3) + 1;
+        if (subs > 17500) subs = 14800;
+        subSpan.innerText = (subs/1000).toFixed(1) + 'k';
+      }, 7000);
+
+      // countdown: classic timer (link expires in)
+      let expireTime = new Date().getTime() + 53 * 60 * 1000; // 53 min
+      function refreshTimer() {
+        const now = new Date().getTime();
+        let diff = expireTime - now;
+        if (diff < 0) {
+          expireTime = new Date().getTime() + 55 * 60 * 1000;
+          diff = expireTime - new Date().getTime();
+        }
+        const hrs = String(Math.floor(diff / 3600000)).padStart(2,'0');
+        const mins = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+        const secs = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+        document.getElementById('luxTimer').innerText = `${hrs}:${mins}:${secs}`;
+      }
+      refreshTimer();
+      setInterval(refreshTimer, 500);
+
+      // CTA click with subtle ripple + link
+      const btn = document.getElementById('ctaLux');
+      btn.addEventListener('click', function(e) {
+        // tiny ripple (very light)
+        const ripple = document.createElement('span');
+        const rect = btn.getBoundingClientRect();
+        ripple.style.position = 'absolute';
+        ripple.style.width = ripple.style.height = '120px';
+        ripple.style.background = 'rgba(212, 175, 55, 0.2)';
+        ripple.style.borderRadius = '50%';
+        ripple.style.left = (e.clientX - rect.left - 60) + 'px';
+        ripple.style.top = (e.clientY - rect.top - 60) + 'px';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'rippleSoft 0.5s ease-out';
+        ripple.style.pointerEvents = 'none';
+        btn.style.position = 'relative';
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
+        window.open(TELEGRAM, '_blank');
+      });
+      const style = document.createElement('style');
+      style.innerHTML = `@keyframes rippleSoft{0%{transform:scale(0); opacity:0.7;}100%{transform:scale(2.5); opacity:0;}}`;
+      document.head.appendChild(style);
+
+      // dp fallback 
+      const dpImg = document.querySelector('.dp-pro img');
+      dpImg.addEventListener('error', function() {
+        this.src = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2255%22%20fill%3D%22%23212430%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%221.5%22%2F%3E%3Ctext%20x%3D%2238%22%20y%3D%2275%22%20fill%3D%22%23e0d6b0%22%20font-size%3D%2230%22%3EB%3C%2Ftext%3E%3C%2Fsvg%3E';
+      });
+    })();
+  </script>
+  <!-- total weight: ~9kb css + tiny inline js, no gsap, no canvas loops, instant load -->
+</body>
+</html>
